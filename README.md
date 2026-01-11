@@ -1,122 +1,112 @@
-# ⚡ FlashLedger
+# 📒 FlashLedger - 极简个人记账系统
 
-> **极致速度 · 绝对隐私 · 极简主义**
+一个基于 Vue 3 + FastAPI 的现代化个人记账应用。界面清新，支持多账本管理、预算控制、热力图统计以及Excel导入导出。
+
+## 演示：
+
+<video src="D:\Users\flow\Desktop\FlashLedger\demo.mp4"></video>
+
+## ✨ 功能特性
+
+- **多账本管理**：支持创建多个独立账本。
+- **可视化图表**：收支折线图（含智能平均线）、消费结构饼图。
+- **记账热力图**：像 GitHub 提交记录一样直观展示你的消费频率与强度。
+- **预算管理**：设置月度预算，实时监控进度。
+- **高级筛选**：支持按日期范围、金额、分类、备注进行组合搜索。
+- **数据导入导出**：支持 Excel 格式的批量导入与导出。
+- **移动端适配**：响应式布局，手机电脑均可访问。
+
+## 🛠 技术栈
+
+- **前端**：Vue 3, Vite, Tailwind CSS, Chart.js
+- **后端**：Python, FastAPI, SQLAlchemy, SQLite
+- **部署**：Docker & Docker Compose
+
+---
+
+## 🚀 快速开始 (推荐使用 Docker)
+
+如果你安装了 Docker，这是最简单的运行方式。
+
+> ！！！注意 ！！！
 >
-> 一款基于 Windows 本地的个人记账应用，拒绝云端上传，数据完全掌握在自己手中。
+> 因为开发是在树莓派上部署的docker，拉取的前端后端的基础镜像均为linux-arm64架构，如果要在windows上部署，需要自己进入dockerfile里面修改一下拉取的镜像
 
-## 📖 项目简介
+1. **克隆项目**
+   
+   ```bash
+   git clone https://github.com/你的用户名/FlashLedger.git
+   cd FlashLedger
+   
+   docker-compose up --build -d
 
-**FlashLedger** 是一款专为 Windows 用户打造的本地化记账工具。它结合了 **Vue 3** 的现代化交互体验与 **PocketBase** 的轻量级后端能力。
+打开浏览器访问：http://localhost:8080 (或 http://你的IP:8080)
 
-**核心理念：**
 
-*   **隐私第一**：所有数据存储在本地（Localhost），无需联网，没有隐私泄露风险。
-*   **极致轻量**：基于单一 `.exe` 后端和静态前端，双击即用，零延迟启动。
-*   **温和交互**：摒弃冰冷的金融感，采用柔和色调，圆角设计，让记账充满生活气息。
 
-**演示：**
+## 💻 手动运行 (开发模式)
 
-<video src="E:\desktop\Project\FlashLedger\demo.mp4"></video>
+如果不使用 Docker，你需要分别启动后端和前端。
 
-## ✨ 核心功能
+### 1. 启动后端 (Backend)
 
-### 📊 数据可视化与仪表盘
-*   **多维度图表**：收支趋势折线图、支出结构饼状图。
-*   **记账日历**：在仪表盘直观展示每月记账打卡情况（月视图）。
-*   **全景视图**：支持切换 **月度 / 年度 / 总览** 视图，跨度分析财务状况。
+需要 Python 3.10+ 环境。
 
-### 📒 账本与分类管理
-*   **多账本支持**：工作、生活、旅行账本独立管理。
-*   **自定义分类**：灵活配置收入/支出分类，满足不同记账习惯。
+```
+cd backend
 
-### 📝 极速记账体验
-*   **快捷录入**：支持全键盘操作，模态对话框快速记一笔。
-*   **智能纠错**：收入/支出类型自动匹配，防止分类混淆。
-*   **CRUD**：账单明细支持行内**编辑**与**删除**（二次确认），操作便捷。
+# 1. 创建并激活虚拟环境 (可选，但在 Python 开发中推荐)
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# Mac/Linux:
+source venv/bin/activate
 
-### 💾 数据导入与导出
-*   **Excel 导出**：支持导出选中月份或全部账单为 `.xlsx` 文件。
-*   **Excel 导入**：支持将备份文件一键还原，数据迁移无忧。
+# 2. 安装依赖
+pip install -r requirements.txt
 
----
+# 3. 确保 data 目录存在 (用于存放 SQLite 数据库)
+mkdir -p ../data
 
-## 🛠️ 技术栈
-
-*   **前端**：Vue 3 + ECharts (图表)
-*   **后端/数据库**：PocketBase (Go语言编写的单文件后端，集成 SQLite)
-*   **脚本**：Windows Batch Script (.bat) 实现一键自动化启动
-
----
-
-## 🚀 快速启动 (Quick Start)
-
-本项目设计为开箱即用，只需简单几步即可运行。
-
-### 1. 环境准备
-*   [Git](https://git-scm.com/)
-
-### 2. 获取代码
-```bash
-git clone https://github.com/flow111817/FlashLedger.git
-cd FlashLedger
+# 4. 启动服务
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 3. 安装npm
-1.  **安装前端依赖**：
-  
-    ```bash
-    cd flash-ledger-web
-    # 下载对应版本msi安装包
-    curl -o node.msi https://nodejs.org/dist/v24.11.1/node-v24.11.1-x64.msi
-    # 后台安装 Node.js
-    msiexec /i node.msi /passive
-    ```
+### 2. 启动前端 (Frontend)
 
-### 4. 一键启动
-在项目根目录下，直接双击运行脚本：
+需要 Node.js 20+ 环境。
 
-👉 **`run.bat`** 
+```
+cd frontend
 
-脚本将自动执行以下操作：
-1.  启动 PocketBase 后端服务。
-2.  启动 Vue 前端开发服务器。
-3.  自动打开默认浏览器访问 `http://localhost:5173`。
+# 1. 安装依赖
+npm install
 
----
+# 2. 启动开发服务器
+npm run dev
+```
+
+启动后，控制台会显示访问地址（通常是 http://localhost:5173）。
 
 ## 📂 目录结构
 
-```text
+```
 FlashLedger/
-├── flash-ledger-web/      # 前端源代码 (Vue 3)
-│   ├── src/               # 页面、组件、逻辑
-│   ├── public/            # 静态资源
-│   └── package.json       # 依赖配置
-├── pocketbase/            # 后端程序目录
-│   ├── pocketbase.exe     # 后端核心程序
-│   └── pb_data/           # [自动生成] 数据库文件，你的所有账单都在这里
-└── run.bat # 一键启动脚本
+├── backend/          # FastAPI 后端代码
+│   ├── main.py       # 主程序入口
+│   ├── requirements.txt
+│   └── ...
+├── frontend/         # Vue3 前端代码
+│   ├── src/          # 页面源文件
+│   └── ...
+├── data/             # 数据库挂载目录 (运行时自动生成)
+├── docker-compose.yml
 ```
 
----
+## 🤝 贡献
 
-## ⚠️ 常见问题
+欢迎提交 Issue 或 Pull Request 来改进这个项目！
 
-**Q: 启动脚本后，显示 'npm' 不是内部或外部命令？**
-A: 请确保你安装了 Node.js，并且重启了电脑或命令行窗口以刷新环境变量。
+## 📄 许可证
 
-**Q: 导入 Excel 失败？**
-A: 请确保导入的 Excel 格式与导出的格式保持一致。
-
-**Q: 如何备份数据？**
-A: 只需复制 `pocketbase/pb_data` 文件夹即可备份所有数据。或者使用应用内的“导出”功能。
-
-## 🗺️ 产品规划 (Roadmap)
-
-- [x] **v1.0**: 基础记账、多账本、图表分析、Excel导入导出。
-- [ ] **v1.1**: 添加主题自定义，分类自定义功能（开发中。。。）
-
-## 📄 License
-
-MIT License. Designed for personal use.
-
+MIT License

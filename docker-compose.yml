@@ -1,0 +1,24 @@
+services:
+  backend:
+    build: ./backend
+    container_name: ledger-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      # 【重点】映射代码：你在 VS Code 改 Python，容器里立马变
+      - ./backend:/app
+      # 映射数据：防止删容器丢数据
+      - ./data:/app/data
+
+  frontend:
+    build: ./frontend
+    container_name: ledger-frontend
+    restart: always
+    ports:
+      - "8080:5173" 
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
